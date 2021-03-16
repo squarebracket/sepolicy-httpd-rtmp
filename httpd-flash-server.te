@@ -1,0 +1,29 @@
+policy_module(httpd-flash-server, 1.0.0)
+
+gen_require(`
+        type httpd_t, flash_port_t;
+')
+
+########################################
+#
+# httpd-flash-server customized policy
+#
+
+########################################
+#
+# Declarations
+#
+
+## <desc>
+##	<p>
+##	Determine whether httpd can act as an RTMP/flash
+##	server by listening on the RTMP/flash port.
+##	</p>
+## </desc>
+gen_tunable(httpd_enable_flash_server, false)
+
+tunable_policy(`httpd_enable_flash_server',`
+	corenet_sendrecv_flash_server_packets(httpd_t)
+	corenet_tcp_bind_flash_port(httpd_t)
+')
+
